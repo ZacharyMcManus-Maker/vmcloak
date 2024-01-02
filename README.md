@@ -38,7 +38,7 @@ $ sudo apt install python3 genisoimage qemu-system-x86 qemu-utils qemu-system-co
 
 It is recommended to install VMCloak in a virtualenv.
 
-Fetching the `Git repository <https://github.com/Cryss76/vmcloak>`_ is the way to go.
+Fetching the [Git repository](https://github.com/Cryss76/vmcloak) is the way to go.
 There you get the latest working version with the least bugs.
 A full example of installing VMCloak manually can be
 as follows:
