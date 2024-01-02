@@ -27,7 +27,7 @@ Installation
 It is recommended that VMCloak is installed in a Virtualenv and on the user
 that should own the created virtual machines.
 
-Do not use the PyPI-version of VMCloak. It is outdated and heavily bugged.
+**Do not use the PyPI-version of VMCloak. It is outdated and heavily bugged.**
 
 Install the requirements. See the docs/ for a full list of requirements.
 
