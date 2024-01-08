@@ -148,35 +148,18 @@ def _add_snapshot_attr(func):
     return func
 
 
-# Comment all non-x64 windows OSes for now until we test them with new VMCloak.
 def os_from_attr(attr):
     ramsize = attr["ramsize"]
-    # if attr["winxp"]:
-    #     osversion = "winxp"
-    #     ramsize = ramsize or 1024
-    # elif attr["win7x86"]:
-    #     ramsize = ramsize or 1024
-    #     osversion = "win7x86"
     if attr["win7x64"]:
         ramsize = ramsize or 2048
         osversion = "win7x64"
-    # elif attr["win81x86"]:
-    #     ramsize = ramsize or 2048
-    #     osversion = "win81x86"
     elif attr["win81x64"]:
         ramsize = ramsize or 2048
         osversion = "win81x64"
-    # elif attr["win10x86"]:
-    #     ramsize = ramsize or 2048
-    #     osversion = "win10x86"
     elif attr["win10x64"]:
         ramsize = ramsize or 2048
         osversion = "win10x64"
     else:
-        # log.error(
-        #     "Please provide one of --winxp, --win7x86, --win7x64, "
-        #     "--win81x86, --win81x64, --win10x86, --win10x64."
-        # )
         log.error("Please provide one of --win7x64, --win81x64, --win10x64.")
         exit(1)
     attr["ramsize"] = ramsize
@@ -404,7 +387,6 @@ def init(ctx, name, adapter, iso, vm, **attr):
                       ramsize=attr["ramsize"],
                       vramsize=attr["vramsize"],
                       vm="%s" % vm,
-                      # paravirtprovider=attr["paravirtprovider"],
                       mac=attr["mac"]))
     session.commit()
 
@@ -733,12 +715,10 @@ def cleanup(name, vm):
 @click.option("--cpus", type=int, help="Amount of CPUs to assign. Same as"
               " image if not specified.")
 @click.option("--hostname", help="Hostname for this VM.")
-# @click.option("--adapter", help="Hostonly adapter for this VM.")
 @click.option("--vm-visible", is_flag=True, help="Start the Virtual Machine in"
               " GUI mode.")
 @click.option("--count", type=int, help="The amount of snapshots to make.",
               default=1, show_default=True)
-# @click.option("--share", help="Add shared folder")
 @click.option("--vrde", is_flag=True, help="Enable the VirtualBox"
               " Remote Display Protocol.")
 @click.option("--vrde-port", default=3389, help="Specify the VRDE port.")
@@ -812,13 +792,11 @@ def snapshot(ctx, name, vmname, ip, resolution, ramsize, cpus, hostname,
     # Copy properties from image and replace snapshot-specific ones
     p = image.platform
     attr["imgpath"] = attr.pop("path")
-    # attr["ip"] = ip
     attr["vm_visible"] = vm_visible
     _if_defined(attr, "cpus", cpus)
     _if_defined(attr, "hostname", hostname)
     _if_defined(attr, "ramsize", ramsize)
     _if_defined(attr, "resolution", resolution)
-    # _if_defined(attr, "share", share)
 
     try:
         iplist = image.network.get_ips(
@@ -859,72 +837,6 @@ def snapshot(ctx, name, vmname, ip, resolution, ramsize, cpus, hostname,
         log.info(f"Snapshot '{vmname}' created")
 
     log.info("Finished creating snapshots")
-
-# XXX Comment until we tested vbox, libvirt, qemu support with this
-# in newer versions.
-# @main.command()
-# @click.argument("name")
-# @click.argument("filepath", type=click.Path(writable=True))
-# def export(name, filepath):
-#     if not filepath.endswith((".ova", ".ovf")):
-#         log.error("The exported file should be either .ova or .ovf")
-#         exit(1)
-#
-#     session = Session()
-#     image = session.query(Image).filter_by(name=name).first()
-#     if not image:
-#         log.error("Image not found: %s", name)
-#         exit(1)
-#
-#     if image.vm != "virtualbox":
-#         log.error("Only VirtualBox VMs can be exported.")
-#         exit(1)
-#
-#     if image.mode != "normal":
-#         log.error("You can't export this image as you have already made "
-#                   "snapshots with it!")
-#         log.error("Please vmcloak clone it and export the clone.")
-#         exit(1)
-#
-#     image.platform.export_vm(image, filepath)
-
-# @main.command()
-# @click.argument("name")
-# def restore(name):
-#     """Restore snapshot"""
-#     snapshot = repository.find_snapshot(name)
-#     if not snapshot:
-#         log.error("Snapshot not found: %s", name)
-#         exit(1)
-#     log.info("Restoring %s to vmcloak snapshot", name)
-#     p = snapshot.platform
-#     p.restore_snapshot(name, "vmcloak")
-
-# @main.command()
-# @click.argument("ip")
-# @click.argument("port", required=False, default=8000)
-# def zer0m0n(ip, port):
-#     log.setLevel(logging.INFO)
-#
-#     log.info("Checking if we can reach the VM..")
-#     a = Agent(ip, port)
-#
-#     try:
-#         status = a.ping().json()
-#     except requests.RequestException:
-#         log.error("Couldn't reach the VM, is it up-and-running? Aborting..")
-#         return
-#
-#     if not isinstance(status, dict)
-# or status.get("message") != "Cuckoo Agent!":
-#         log.error("Agent in VM isn't the new Cuckoo Agent? Aborting..")
-#         return
-#
-#     h = get_os("win7x64")
-#     log.info("Patching zer0m0n-related files.")
-#     vmcloak.dependencies.names["zer0m0n"](a=a, h=h).run()
-#     log.info("Good to go, now *reboot* and make a new *snapshot*
-# of your VM!")
 
 
 @main.command()
@@ -980,12 +892,6 @@ def delimg(name):
     finally:
         repository.remove_image(name)
 
-
-# @main.command("import")
-# def _import():
-#     """Import images and snapshots
-#     Can also be used to fix paths"""
-#     repository.import_all()
 
 # List things:
 @main.group("list")
