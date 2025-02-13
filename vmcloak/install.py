@@ -17,9 +17,9 @@ class InstallError(Exception):
     pass
 
 _recipes = {
-    "win10x64": ["ie11", "dotnet:4.7.2", "java:7u80", "vcredist:2013",
-                 "vcredist:2019", "edge", "carootcert", "adobepdf",
-                 "wallpaper", "optimizeos", "disableservices"],
+    "win10x64": ["ie11", "dotnet:4.7.2", "vcredist:2013",
+                 "vcredist:2019", "edge", "carootcert",
+                 "winrar", "optimizeos", "disableservices"],
     "win7x64": ["ie11", "dotnet:4.7.2", "java:7u80", "vcredist:2013",
                  "vcredist:2019", "carootcert", "adobepdf", "wallpaper",
                 "optimizeos", "disableservices"]
