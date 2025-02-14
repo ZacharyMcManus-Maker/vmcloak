@@ -69,7 +69,7 @@ sudo adduser cuckoo kvm && sudo chmod 666 /dev/kvm
 
 vmcloak --debug init --win10x64 --hddsize 128 --cpus 2 --ramsize 4096 --network 192.168.30.0/24 --vm qemu --ip 192.168.30.2 --iso-mount /mnt/win10x64 win10base br0 --vm-visible
 vmcloak --debug install win10base --recommended --vm-visible
-vmcloak --debug snapshot --count 1 win10base win10vm_ 192.168.30.10
+vmcloak --debug snapshot --count 1 win10base win10vm_ 192.168.30.10 --vm-visible
 ```
 
 It is recommended to install VMCloak in a virtualenv.
