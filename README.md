@@ -36,6 +36,42 @@ $ sudo apt update
 $ sudo apt install python3 genisoimage qemu-system-x86 qemu-utils qemu-system-common
 ```
 
+
+Open Terminal and run the following commands
+```bash
+sudo apt-get install -y build-essential \
+    software-properties-common \
+    unzip \
+    curl \
+    git \
+    python3.10 python3.10-dev python3.10-venv \
+    libhyperscan5 libhyperscan-dev \
+    libjpeg8-dev zlib1g-dev p7zip-full rar unace-nonfree cabextract \
+    yara \
+    tcpdump \
+    libssl-dev libcapstone-dev \
+    uwsgi uwsgi-plugin-python3 \
+    nginx \
+    genisoimage qemu-system-common qemu-utils qemu-system-x86
+
+cd ~ && git clone https://github.com/ZacharyMcManus-Maker/vmcloak.git 
+cd vmcloak
+python3.10 -m venv venv
+source venv/bin/activate
+python3.10 -m pip install .
+
+vmcloak isodownload --win10x64 --download-to /home/cuckoo/win10x64.iso
+sudo /home/cuckoo/vmcloak/bin/vmcloak-qemubridge br0 192.168.30.1/24
+sudo mkdir -p /etc/qemu/ && echo "allow br0" | sudo tee /etc/qemu/bridge.conf
+sudo chmod u+s /usr/lib/qemu/qemu-bridge-helper
+sudo mkdir -p /mnt/win10x64 && sudo mount -o loop,ro /home/cuckoo/win10x64.iso /mnt/win10x64
+sudo adduser cuckoo kvm && sudo chmod 666 /dev/kvm
+
+vmcloak --debug init --win10x64 --hddsize 128 --cpus 2 --ramsize 4096 --network 192.168.30.0/24 --vm qemu --ip 192.168.30.2 --iso-mount /mnt/win10x64 win10base br0 --vm-visible
+vmcloak --debug install win10base --recommended
+vmcloak --debug snapshot --count 1 win10base win10vm_ 192.168.30.10
+```
+
 It is recommended to install VMCloak in a virtualenv.
 
 Fetching the [Git repository](https://github.com/Cryss76/vmcloak) is the way to go.
