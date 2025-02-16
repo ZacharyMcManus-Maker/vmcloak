@@ -19,7 +19,9 @@ class InstallError(Exception):
 _recipes = {
     "win10x64": ["ie11", "dotnet:4.7.2", "vcredist:2013",
                  "vcredist:2019", "edge", "carootcert",
-                 "winrar", "optimizeos", "disableservices"],
+                 "winrar", "optimizeos", "disableservices",
+                 "java:8u151", "python:3.10.0", "chrome:latest",
+                 "adobepdf:11.0.8"],
     "win7x64": ["ie11", "dotnet:4.7.2", "java:7u80", "vcredist:2013",
                  "vcredist:2019", "carootcert", "adobepdf", "wallpaper",
                 "optimizeos", "disableservices"]
